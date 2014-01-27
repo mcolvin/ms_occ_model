@@ -10,7 +10,7 @@
 	odbcClose(com3)
 	
 	
-	
+	load("./output/ms_mcmc.Rdata")
 	
 
 	

@@ -1,0 +1,17 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="8">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\1_global.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\2_functions.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\3_load.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\4_clean.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\5_tables.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\6_figures.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\7_analysis.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\7_models.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1572" startPos="4" endPos="4" selMode="0" lang="R" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\8_main.R" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="912" startPos="0" endPos="0" selMode="0" lang="Normal Text" encoding="-1" filename="C:\Users\colvinm\Documents\projects\PSM\analyses\ms_occ_model\analysis\src\make.Rmd" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>

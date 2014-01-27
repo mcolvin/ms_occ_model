@@ -44,110 +44,19 @@
 	dat[dat$organ=="hrt",]$organ_id<- 2
 	dat[dat$organ=="liv",]$organ_id<- 3
 	dat[dat$organ=="spl",]$organ_id<- 4
-	
-	dcast(dat, id+organ_id~parasite,value.var="sev",mean, subset=.(rep==1 & organ_id==1))
+	dat$organ_id<- as.numeric(as.character(dat$organ_id))
+	dat$parasite<- as.factor(dat$parasite)
 	analysis_dat<- array(0, dim=c(26,4,5,3)) 
-	
-	
-	
-	
-	dat$withinOrgan<- dat$organ
-	dat[!(dat$organ %in% c("glo", "tub")),]$withinOrgan<- NA
-	dat[dat$organ %in% c("glo", "tub"),]$organ<- 'kid'
 
-	dat$pres<- 0
-	dat[dat$sev %in% c(1,2,3,4),]$pres<- 1
-	dat[dat==-99]<-NA
-	dat[is.na(dat$sev),]$pres<- NA
+	for(organ in 1:5)
+		{
+		for(reps in 1:3)
+			{
+			fillDat<- dat[dat$organ_id==organ & dat$rep==reps,]
+			analysis_dat[,,organ,reps]<- as.matrix(dcast(fillDat, id~parasite,value.var="sev",mean,
+				fill=0,drop=FALSE)[,-c(1:4)])
+			}
+		}
 	
-	xx<- dcast(dat, id+rep~parasite+organ+withinOrgan, value.var="sev",mean)		
-	
-	nfish = 26
-	
-	# [2] MAKE DATASETS FOR EACH PATHOGEN
-	# N. SALMONICOLA DATA (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney, 6=tub, 7=glom)
-	ns_dat<- array(0, dim=c(nfish,5,3)) 
-	nano<- xx[,c(1,2,12,13,14)]
-	names(nano)[-c(1:2)]<- c("xx1",'xx2','xx5')
-	nano$xx3<- nano$xx4<-0
-	nano<- nano[,c(1,2,3,4,7,6,5)]
-	ns_dat[,,1]<- as.matrix(nano[nano$rep==1,-c(1,2)])
-	ns_dat[,,2]<- as.matrix(nano[nano$rep==2,-c(1,2)])
-	ns_dat[,,3]<- as.matrix(nano[nano$rep==3,-c(1,2)])
-	ns_dat[ns_dat>0]<- 1
-	
-	# P. MINIBCORNIS (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney, 6=tub, 7=glom)
-	pm_dat<- array(0, dim=c(nfish,5,3)) 
-	pm<- xx[,c(1,2,15,16)]
-	names(pm)[-c(1,2)]<- c("xx4","xx5")
-	pm$xx3<-pm$xx2<-pm$xx1<- 0
-	pm<- pm[,c(1,2, 5:7, 3,4)]
-	pm_dat[,,1]<- as.matrix(pm[pm$rep==1,-c(1,2)])
-	pm_dat[,,2]<- as.matrix(pm[pm$rep==2,-c(1,2)])
-	pm_dat[,,3]<- as.matrix(pm[pm$rep==3,-c(1,2)])
-	pm_dat[pm_dat>0]<- 1
-		
-	# R. SALMONINARUM (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney)	
-	bkd_dat<- array(0, dim=c(nfish,5,3)) 
-	bkd<- xx[,c(1,2,4:6)]
-	names(bkd)[-c(1:2)]<- c("xx5",'xx3','xx4')
-	bkd$xx1<- bkd$xx2<-0
-	bkd<- bkd[,c(1,2,7,6,4,5,3)]
-	bkd_dat[,,1]<- as.matrix(bkd[bkd$rep==1,-c(1,2)])
-	bkd_dat[,,2]<- as.matrix(bkd[bkd$rep==2,-c(1,2)])
-	bkd_dat[,,3]<- as.matrix(bkd[bkd$rep==3,-c(1,2)])
-	bkd_dat[bkd_dat>0]<- 1
-
-	# AE (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney)
-	ae_dat<- array(0, dim=c(nfish,5,3)) 
-	ae<- xx[,c(1,2,3)]
-	names(ae)[-c(1:2)]<- c("xx1")
-	ae$xx5<- ae$xx4<-ae$xx3<-ae$xx2<-0
-	ae_dat[,,1]<- as.matrix(ae[ae$rep==1,-c(1,2)])
-	ae_dat[,,2]<- as.matrix(ae[ae$rep==2,-c(1,2)])
-	ae_dat[,,3]<- as.matrix(ae[ae$rep==3,-c(1,2)])
-	ae_dat[ae_dat>0]<- 1
-	
-	ae_dat<- dcast(xx, id~rep, value.var="AE_gill_NA", mean)[,c(2,3,4)]
-	ae_dat[ae_dat>0]<- 1
-	ae_dat<- as.matrix(ae_dat)
-	
-	# CLEAN UP ESTIMATES
-	#estimates$organ<- "Fish"
-	#for(i in 1:nrow(estimates))
-	#	{
-	#	estimates$organ[i]<- unlist(strsplit(as.character(estimates$X)[i],"\\["))[2]
-	#	estimates$parameter[i]<- unlist(strsplit(as.character(estimates$X)[i],"\\["))[1]
-	#	}
-	#	estimates[is.na(estimates$organ),]$organ<- "Fish"
-	#estimates[estimates$organ=="1]",]$organ<- "Gills"
-	#estimates[estimates$organ=="2]",]$organ<- "Heart"
-	#estimates[estimates$organ=="3]",]$organ<- "Liver"
-	#estimates[estimates$organ=="4]",]$organ<- "Spleen"
-	#estimates[estimates$organ=="5]",]$organ<- "Kidney"
-	#estimates[estimates$organ=="6]",]$organ<- "Tubules"
-	#estimates[estimates$organ=="7]",]$organ<- "Glomerulus"
-	
-	
-	# FISH LEVEL COVARIATES
-	ns_counts<- subset (ns_counts, organ%in% c("kidney","Kidney"))
-	ns_counts<- subset (ns_counts, necropsyId%in% fishdat$necropsyId)
-	ns_counts<- ns_counts[-nrow(ns_counts),] # DROP SECOND 466
-	ns_counts<-ns_counts[,c(5,10)]
-	
-	fishdat<- merge(fishdat, ns_counts, by="necropsyId",all.x=TRUE)
-	#fishdat[fishdat$length< 0,]$length<- NA
-	fishdat$sex_id<- ifelse(fishdat$sex=="M",0,1)
-	fishdat<- fishdat[order(fishdat$rId),]
-	XX<- as.matrix(cbind(fishdat$sex_id, fishdat$length))
-	
-	XXX<- matrix(0, nrow=26, ncol=5)
-	XXX[,5]<- fishdat[,7]
-	
-	####
-	
-	
-	
-	
-	
-	
+analysis_dat[analysis_dat>=1]<-1
+nfish = 26

@@ -1,21 +1,37 @@
-	# (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney)
-	######################################################################
-	# PM [done] (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney)
-	######################################################################
-	param <- c('pred_organ_psi','pred_organ_p','pred.fish','prev','prev_org','rss','rss_sim',"y.sim")
-	dat<- list(y=pm_dat,nfish=nfish,no.orgs=5)
-	lat.org<- matrix(1,nrow=nfish, ncol=5)
-	lat.org[,c(1:3)]<- 0
-	inits_base <- function(t) 
-		{
-		list(lat.org=lat.org,alpha0=0 ,beta=runif(5), gamma=runif(5),lat.fish = rep(1, nfish))	
-		list(lat.org=lat.org,alpha0=0 ,beta=runif(5), gamma=runif(5),lat.fish = rep(1, nfish))	
-		list(lat.org=lat.org,alpha0=0 ,beta=runif(5), gamma=runif(5),lat.fish = rep(1, nfish))	
-		}	
-	out <- bugs(data=dat,inits=inits_base,parameters=param,model = filename,
-		n.chains = 3,n.iter = 130000,n.burnin = 30000,	debug=TRUE,	bugs.directory=bugsdir,n.thin=20)
-	write.csv(out$summary,"./dat/pm_out.csv")	
-	ests<- list(pm= out$summary)
+	# (1=gill, 2=heart, 3=liver, 4=spleen, 5=kidney)	
+	
+params<- c("psi_z","psi_organ","p","sifAB","sifBC","sifAC","sifAD","sifBD","sifCD")
+
+
+inits<- function(t){
+	list(theta=runif(15),eta=runif(20), beta=runif(20)
+	)}
+
+	
+	# BUNDLE DATA UP
+	combos<-as.matrix(expand.grid(c(0,1),c(0,1),c(0,1),c(0,1)))
+	dat<- list(yyy=analysis_dat,nfish=26,combos=combos)
+	
+	out <- bugs(data=dat,inits=inits,parameters=params,model = filename,
+		n.chains = 3,n.iter = 500000,n.burnin = 100000, debug=TRUE,n.thin=20,	
+		bugs.directory="C:/Documents and Settings/mcolvin/My Documents/WinBUGS14 - 1",	
+		working.directory=getwd())	
+		
+	out <- bugs(data=dat,inits=inits,parameters=params,model = filename,
+		n.chains = 3,n.iter = 5000,n.burnin = 1000, debug=TRUE,	bugs.directory="C:/Users/colvinm/Documents/WinBUGS14 - 1",
+		working.directory=getwd())	
+	out$mean
+
+	save(file="./output/ms_mcmc.Rdata", out)
+
+	
+	
+	
+	
+	
+	
+	
+	
 	### DIAGNOSTICS AND GOF
 		out_gof <- as.mcmc.list(out)		
 		plot(out_gof, ask=T)
